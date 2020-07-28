@@ -11,10 +11,11 @@ const App = () => {
   let data = [
     {
       label: "Однажды в студёную зимнюю пору я из лесу вышел. Был сильный мороз. Гляжу - поднимается медленно в гору лощадка, везущая хворосту воз. А волк был голодный и злобный ужасно, Всю жизнь он мечтал о козле..",
-      important: false
+      important: false,
+      id: 1
     },
-    {label: "Маша - дура", important: true},
-    { label: "Тестируем <b>Реакт</b>", important: false }
+    {label: "Маша - дура", important: true, id:2},
+    { label: "Тестируем <b>Реакт</b>", important: false,id:3 }
   ];
 
   return (
