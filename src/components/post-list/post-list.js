@@ -1,15 +1,14 @@
 import React from 'react'
-import PostListTtem from '../post-list-item'
 import './post-list.css';
+import PostListItem from '../post-list-item';
 
-const PostList = () => {
+const PostList = ({posts}) => {
+  let key=1;
   return (
     <ul className="app-list list-group">
-      <PostListTtem />
-      <PostListTtem />
-      <PostListTtem />
+      {/* { posts.map((item) => <PostListItem label={item.label} important={item.important} key={key++}/>) } */}
+      { posts.map((item) => <PostListItem {...item} key={key++}/>) }
     </ul>
-
   );
 }
 
