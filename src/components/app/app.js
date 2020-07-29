@@ -14,8 +14,16 @@ const App = () => {
       important: false,
       id: 1
     },
-    {label: "Маша - дура", important: true, id:2},
-    { label: "Тестируем <b>Реакт</b>", important: false,id:3 }
+    {
+      label: "Маша - дура",
+      important: true,
+      id: 2
+    },
+    {
+      label: "Тестируем <b>Реакт</b>",
+      important: false,
+      id: 3
+    }
   ];
 
   return (
@@ -25,7 +33,7 @@ const App = () => {
         <SearchPanel />
         <PostStatusFilter />
       </div>
-      <PostList posts={data}/>
+      <PostList posts={data} />
       <PostAddForm />
     </div>
   );
