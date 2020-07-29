@@ -11,6 +11,8 @@ const AppBlock = styled.div`
   margin: 0 auto;
   max-width: 800px;
 `;
+const StylizedAppBlock = styled(AppBlock)`border: 1px solid gray; border-radius: 2px; padding: 10px;`;
+
 const App = () => {
   // data - эмуляция того, что пришло с сервера
   let data = [
@@ -32,7 +34,7 @@ const App = () => {
   ];
 
   return (
-    <AppBlock>
+    <StylizedAppBlock>
       <AppHeader />
       <div className="search-panel d-flex">
         <SearchPanel />
@@ -40,7 +42,7 @@ const App = () => {
       </div>
       <PostList posts={data} />
       <PostAddForm />
-    </AppBlock>
+    </StylizedAppBlock>
   );
 }
 
