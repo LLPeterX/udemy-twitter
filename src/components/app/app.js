@@ -37,14 +37,29 @@ class App extends React.Component {
       ]
     };
     this.removeItem = this.deletePost.bind(this);
+    this.addPost = this.addPost.bind(this);
   }
 
   deletePost(id) {
-    //this.setState(({data}) => {data: data.filter(item => item.id!=id)});
-    this.setState(({ data }) => ({ data: data.filter(item => item.id !== id ) }));
+    //this.setState(({data}) => {data: data.filter(item => item.id!==id)});
+    this.setState(({ data }) => ({ data: data.filter(item => item.id !== id) }));
+  }
+
+  addPost(label,important=false) {
+    //const id = Math.max.apply(Math, this.state.data.map((post) => post.id)) + 1;
+    //const newPost = { label,  id, important: false };
+    //this.setState(({data}) => ({data: data.concat([newPost])})); можно так
+    this.setState(({ data }) => ({
+      data: [...data,
+      {
+        label, id: Math.max.apply(Math, this.state.data.map((post) => post.id)) + 1,
+        important
+      }]
+    }));
   }
 
   render() {
+
     return (
       <StylizedAppBlock>
         <AppHeader />
@@ -55,7 +70,8 @@ class App extends React.Component {
         <PostList
           posts={this.state.data}
           onDelete={id => this.deletePost(id)} />
-        <PostAddForm />
+        <PostAddForm
+          onAddPost={this.addPost} />
       </StylizedAppBlock>
     );
   }
