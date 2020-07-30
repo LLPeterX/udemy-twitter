@@ -5,7 +5,7 @@ export default class PostListItem extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      important: this.props.important,
+      important: this.props.important, // начальное значение лайка берем из пропсов.
       like: false
     };
     this.onImportrant = this.onImportrant.bind(this);
@@ -13,29 +13,26 @@ export default class PostListItem extends React.Component {
   }
 
   onImportrant() {
-    this.setState({ important: !this.state.important }); // тоже работает
-    // this.setState(({ important }) => ({
-    //     important: !important
-    // }));
+    //    this.setState({ important: !this.state.important }); // тоже работает
+    this.setState(({ important }) => ({
+      important: !important
+    }));
   }
+
   onLike() {
     this.setState({ like: !this.state.like }); // тоже работает
-    // console.log('change like from',this.state.like);
-    // this.setState(({ like }) => ({ // like from prevState
-    //     like: !this.state.like
-    // }));
   }
-  
+
 
   render() {
-    const { label } = this.props;
+    const { label, id, onDelete } = this.props; // onDelete() из app
     const { important, like } = this.state;
     let classNames = "app-list-item d-flex justify-content-between";
     if (important) {
       classNames += " important";
     }
-    if(like) {
-      classNames+=" like";
+    if (like) {
+      classNames += " like";
     }
     return (
       <li className={classNames}>
@@ -51,7 +48,8 @@ export default class PostListItem extends React.Component {
           </button>
           <button
             type="button"
-            className="btn-trash btn-sm">
+            className="btn-trash btn-sm"
+            onClick={()=>onDelete(id)}>
             <i className="fa fa-trash-o"></i>
           </button>
           <i className="fa fa-heart"></i>

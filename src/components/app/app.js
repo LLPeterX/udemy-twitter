@@ -13,37 +13,52 @@ const AppBlock = styled.div`
 `;
 const StylizedAppBlock = styled(AppBlock)`border: 1px solid gray; border-radius: 2px; padding: 10px;`;
 
-const App = () => {
+class App extends React.Component {
   // data - эмуляция того, что пришло с сервера
-  let data = [
-    {
-      label: "Однажды в студёную зимнюю пору я из лесу вышел. Был сильный мороз. Гляжу - поднимается медленно в гору лощадка, везущая хворосту воз. А волк был голодный и злобный ужасно, Всю жизнь он мечтал о козле..",
-      important: false,
-      id: 1
-    },
-    {
-      label: "Маша - дура",
-      important: true,
-      id: 2
-    },
-    {
-      label: "Тестируем <b>Реакт</b>",
-      important: false,
-      id: 3
-    }
-  ];
+  constructor(props) {
+    super(props);
+    this.state = {
+      data: [
+        {
+          label: "Однажды в студёную зимнюю пору я из лесу вышел. Был сильный мороз. Гляжу - поднимается медленно в гору лощадка, везущая хворосту воз. А волк был голодный и злобный ужасно, Всю жизнь он мечтал о козле..",
+          important: false,
+          id: 1
+        },
+        {
+          label: "Маша - дура",
+          important: true,
+          id: 2
+        },
+        {
+          label: "Тестируем <b>Реакт</b>",
+          important: false,
+          id: 3
+        }
+      ]
+    };
+    this.removeItem = this.deletePost.bind(this);
+  }
 
-  return (
-    <StylizedAppBlock>
-      <AppHeader />
-      <div className="search-panel d-flex">
-        <SearchPanel />
-        <PostStatusFilter />
-      </div>
-      <PostList posts={data} />
-      <PostAddForm />
-    </StylizedAppBlock>
-  );
+  deletePost(id) {
+    //this.setState(({data}) => {data: data.filter(item => item.id!=id)});
+    this.setState(({ data }) => ({ data: data.filter(item => item.id !== id ) }));
+  }
+
+  render() {
+    return (
+      <StylizedAppBlock>
+        <AppHeader />
+        <div className="search-panel d-flex">
+          <SearchPanel />
+          <PostStatusFilter />
+        </div>
+        <PostList
+          posts={this.state.data}
+          onDelete={id => this.deletePost(id)} />
+        <PostAddForm />
+      </StylizedAppBlock>
+    );
+  }
 }
 
 export default App;
