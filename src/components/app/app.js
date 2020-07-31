@@ -21,42 +21,65 @@ class App extends React.Component {
       data: [
         {
           label: "Однажды в студёную зимнюю пору я из лесу вышел. Был сильный мороз. Гляжу - поднимается медленно в гору лощадка, везущая хворосту воз. А волк был голодный и злобный ужасно, Всю жизнь он мечтал о козле..",
-          important: false,
+          important: false, like: false,
           id: 1
         },
         {
           label: "Маша - дура",
-          important: true,
+          important: true, like: false,
           id: 2
         },
         {
           label: "Тестируем <b>Реакт</b>",
-          important: false,
+          important: false, like: false,
           id: 3
         }
       ]
     };
     this.removeItem = this.deletePost.bind(this);
     this.addPost = this.addPost.bind(this);
+    this.toggleImportant = this.toggleImportant.bind(this);
+    this.toggleLiked = this.toggleLiked.bind(this);
   }
 
   deletePost(id) {
-    //this.setState(({data}) => {data: data.filter(item => item.id!==id)});
     this.setState(({ data }) => ({ data: data.filter(item => item.id !== id) }));
   }
 
-  addPost(label,important=false) {
-    //const id = Math.max.apply(Math, this.state.data.map((post) => post.id)) + 1;
-    //const newPost = { label,  id, important: false };
-    //this.setState(({data}) => ({data: data.concat([newPost])})); можно так
+  addPost(label) {
     this.setState(({ data }) => ({
       data: [...data,
       {
         label, id: Math.max.apply(Math, this.state.data.map((post) => post.id)) + 1,
-        important
+        important: false
       }]
     }));
   }
+
+  // вариант от Ивана
+  toggleImportant(id) {
+    this.setState(({ data }) => {
+      const index = data.findIndex(item => item.id===id);
+      const oldPost = data[index], // старый объект
+            newPost = {...oldPost, important: !oldPost.important};
+      const newData = [...data.slice(0,index), newPost, ...data.slice(index+1)];
+      return {data: newData};
+    });
+  }
+
+  // Мой вариант - покороче
+  toggleLiked(id) {
+    this.setState(({ data }) => {
+      return {data: data.map(item => {
+        if(item.id === id) {
+          return {...item, like: !item.like}
+        }
+        return item;
+      })}
+    
+    });
+  }
+
 
   render() {
 
@@ -69,7 +92,10 @@ class App extends React.Component {
         </div>
         <PostList
           posts={this.state.data}
-          onDelete={id => this.deletePost(id)} />
+          onDelete={id => this.deletePost(id)}
+          onToggleImportant={id => this.toggleImportant(id)}
+          onToggleLiked={id => this.toggleLiked(id)}
+        />
         <PostAddForm
           onAddPost={this.addPost} />
       </StylizedAppBlock>
