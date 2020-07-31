@@ -82,10 +82,11 @@ class App extends React.Component {
 
 
   render() {
-
+    const likesCount = this.state.data.filter(item => item.like).length;
+    const totalCount = this.state.data.length;
     return (
       <StylizedAppBlock>
-        <AppHeader />
+        <AppHeader total={totalCount} likes={likesCount}/>
         <div className="search-panel d-flex">
           <SearchPanel />
           <PostStatusFilter />
