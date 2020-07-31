@@ -14,13 +14,12 @@ const AppBlock = styled.div`
 const StylizedAppBlock = styled(AppBlock)`border: 1px solid gray; border-radius: 2px; padding: 10px;`;
 
 class App extends React.Component {
-  // data - эмуляция того, что пришло с сервера
   constructor(props) {
     super(props);
     this.state = {
       data: [
         {
-          label: "Однажды в студёную зимнюю пору я из лесу вышел. Был сильный мороз. Гляжу - поднимается медленно в гору лощадка, везущая хворосту воз. А волк был голодный и злобный ужасно, Всю жизнь он мечтал о козле..",
+          label: "Однажды в студёную зимнюю пору я из лесу вышел. Был сильный мороз.",
           important: false, like: false,
           id: 1
         },
@@ -34,12 +33,15 @@ class App extends React.Component {
           important: false, like: false,
           id: 3
         }
-      ]
+      ],
+      searchTerm: '',
+      filter: ''
     };
     this.removeItem = this.deletePost.bind(this);
     this.addPost = this.addPost.bind(this);
     this.toggleImportant = this.toggleImportant.bind(this);
     this.toggleLiked = this.toggleLiked.bind(this);
+    this.updateSearch = this.updateSearch.bind(this);
   }
 
   deletePost(id) {
@@ -47,21 +49,26 @@ class App extends React.Component {
   }
 
   addPost(label) {
+    //const nextId = this.state.data.length+1;
+    if(label.length===0) return;
+    const nextId = Math.max.apply(Math, this.state.data.map((post) => post.id)) + 1;  // без apply() будет NaN
     this.setState(({ data }) => ({
       data: [...data,
       {
-        label, id: Math.max.apply(Math, this.state.data.map((post) => post.id)) + 1,
-        important: false
+        label, id: nextId,
+        important: false,
+        like: false
       }]
     }));
   }
 
-  // вариант от Ивана
+    // вариант от Ивана
   toggleImportant(id) {
     this.setState(({ data }) => {
       const index = data.findIndex(item => item.id===id);
       const oldPost = data[index], // старый объект
             newPost = {...oldPost, important: !oldPost.important};
+      // Создаем новый массив: кусок до объекта + новый объект + кусок после объекта
       const newData = [...data.slice(0,index), newPost, ...data.slice(index+1)];
       return {data: newData};
     });
@@ -80,19 +87,33 @@ class App extends React.Component {
     });
   }
 
+  findPostsBySearchString(items, term) {
+    if(term.length === 0) {
+      return items;
+    }
+    //return items.filter(item => item.label.toUpperCase().indexOf(term.toUpperCase())>=0);
+    return items.filter(item => item.label.indexOf(term)>=0);
+  }
+
+  updateSearch(searchTerm) {
+    this.setState({searchTerm});
+  }
+
 
   render() {
     const likesCount = this.state.data.filter(item => item.like).length;
     const totalCount = this.state.data.length;
+    const visiblePosts = this.findPostsBySearchString(this.state.data, this.state.searchTerm);
+    console.log('render state:',this.state);
     return (
       <StylizedAppBlock>
         <AppHeader total={totalCount} likes={likesCount}/>
         <div className="search-panel d-flex">
-          <SearchPanel />
+          <SearchPanel onSearch={this.updateSearch}/>
           <PostStatusFilter />
         </div>
         <PostList
-          posts={this.state.data}
+          posts={visiblePosts}
           onDelete={id => this.deletePost(id)}
           onToggleImportant={id => this.toggleImportant(id)}
           onToggleLiked={id => this.toggleLiked(id)}
